@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Как Kivvi и Pestolett на практику ходили</title>
+    <link rel="icon" type="image/png" sizes="256x256" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="assets/logo.png">
+
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/logo.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="assets/logo.png">
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<audio id="bgm" src="assets/audio/home.mp3"></audio>
+<div class="music-control" aria-label="Управление звуком">
+<button id="music-btn" class="icon-btn" title="Громкость" aria-label="Громкость"><span class="icon">♬</span></button>
+<div id="music-panel" class="music-panel hidden">
+<div class="music-row">
+  <div class="track-label">Трек:</div>
+  <div id="track-title" class="track-title">—</div>
+</div>
+<div class="music-row">
+<label for="volume-range">Громкость</label>
+<input id="volume-range" type="range" min="0" max="1" step="0.01" value="0.6"/>
+</div>
+<div class="music-row">
+  <button id="music-prev" class="btn small ghost" title="Предыдущий трек">⟵</button>
+  <button id="music-next" class="btn small ghost" title="Следующий трек">⟶</button>
+</div>
+<div class="music-row">
+<button id="music-toggle" class="btn small">Включить звук</button>
+<button id="music-mute" class="btn small ghost">Выключить звук</button>
+</div>
+<div class="volume-hint">Если звук не играет, браузер может требовать первое действие (клик).</div>
+</div>
+</div>
+<div id="fade-layer" class="fade-layer" aria-hidden="true"></div>
+<section id="screen-menu" class="screen active">
+<div class="menu-sidebar" role="navigation" aria-label="Главное меню">
+<div class="menu-logo">
+<div class="menu-title">Как Kivvi и Pestolett<br/>на практику ходили</div>
+<div class="menu-subtitle">Крутейший, невероятной красоты и гениальности совместный проект (а не эти ваши твайны).</div>
+</div>
+<div class="menu-buttons">
+<button id="btn-edu" class="menu-btn">Учебная практика</button>
+<button id="btn-prod" class="menu-btn">Производственная практика</button>
+<button class="menu-btn disabled" aria-disabled="true">
+  Производство
+  <span class="badge-dev">в разработке</span>
+</button>
+<button id="btn-certs" class="menu-btn">Сертификаты</button>
+
+<button id="btn-info" class="menu-btn">Доп. информация</button>
+<a class="menu-btn external" href="https://jcw87.github.io/c2-sans-fight/" target="_blank" rel="noopener">
+  Мини-игра
+</a>
+
+</div>
+<div class="menu-footer">Нажмите на пункт меню слева, чтобы продолжить.</div>
+</div>
+<div class="menu-stage" aria-hidden="true">
+<img class="menu-sprite menu-kivvi" src="assets/sprites/kivvi.png" alt=""/>
+<img class="menu-sprite menu-pestolett" src="assets/sprites/pestolett.png" alt=""/>
+</div>
+</section>
+<section id="screen-select" class="screen">
+<div class="select-wrap">
+<h2 id="select-title" class="select-title">Выбор персонажа</h2>
+<div class="select-row" role="group" aria-label="Выбор персонажа">
+<button class="select-card" data-pick="kivvi" aria-label="Выбрать Kivvi">
+<img class="select-sprite kivvi" src="assets/sprites/kivvi.png" alt="Kivvi"/>
+<div class="select-name">Kivvi</div>
+</button>
+<button class="select-card" data-pick="pestolett" aria-label="Выбрать Pestolett">
+<img class="select-sprite pestolett" src="assets/sprites/pestolett.png" alt="Pestolett"/>
+<div class="select-name">Pestolett</div>
+</button>
+</div>
+<button id="btn-menu-from-select" class="btn ghost">В меню</button>
+</div>
+</section>
+<section id="screen-novel" class="screen">
+<div id="vn-bg" class="vn-bg" aria-hidden="true"></div>
+<div class="vn-characters" aria-hidden="true">
+<img id="vn-left" class="vn-sprite left kivvi" alt="Kivvi"/>
+<img id="vn-right" class="vn-sprite right pestolett" alt="Pestolett"/>
+</div>
+<img id="vn-overlay" class="vn-overlay hidden" alt="overlay"/>
+<div id="vn-ui" class="vn-ui">
+<div class="vn-box">
+<div class="vn-top">
+<div id="vn-name" class="vn-name"></div>
+<div class="vn-controls">
+<button id="btn-history" class="btn small">История</button>
+<button id="btn-auto" class="btn small ghost" aria-pressed="false">Авто</button>
+<button id="btn-menu-from-novel" class="btn small ghost">В меню</button>
+</div>
+</div>
+<div id="vn-text" class="vn-text"></div>
+<div class="vn-actions">
+<div class="vn-actions-left">
+<button id="btn-back" class="btn ghost">Назад</button>
+<button id="btn-next" class="btn">Дальше</button>
+</div>
+</div>
+</div>
+</div>
+<div id="history-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="История диалогов">
+<div class="modal-card">
+<div class="modal-head">
+<div class="modal-title">История</div>
+<button id="history-close" class="btn small ghost" aria-label="Закрыть">Закрыть</button>
+</div>
+<div id="history-list" class="history-list"></div>
+</div>
+</div>
+</section>
+<section id="screen-certs" class="screen">
+<div class="certs-wrap">
+<div class="certs-head">
+<div>
+<h2 id="certs-title" class="certs-title">Сертификаты</h2>
+<div id="certs-subtitle" class="certs-subtitle"></div>
+</div>
+<button id="btn-menu-from-certs" class="btn ghost">В меню</button>
+</div>
+<div id="certs-list" class="certs-list" aria-label="Список сертификатов"></div>
+</div>
+</section>
+
+
+<section id="screen-info" class="screen">
+  <div class="info-wrap">
+    <div class="info-head">
+      <div>
+        <h2 class="info-title">Доп. информация</h2>
+        <div id="info-subtitle" class="info-subtitle"></div>
+      </div>
+      <button id="btn-menu-from-info" class="btn ghost">В меню</button>
+    </div>
+
+    <div id="info-list" class="info-list" aria-label="Ссылки"></div>
+  </div>
+</section>
+
+<div id="img-modal" class="img-modal hidden" role="dialog" aria-modal="true">
+<button id="img-modal-close" class="img-modal-close" aria-label="Закрыть">×</button>
+<img id="img-modal-img" alt="certificate"/>
+<div id="img-modal-caption" class="img-modal-caption"></div>
+</div>
+<button id="easter-btn" aria-label="secret">?</button>
+<script src="script.js"></script>
+
+</body>
+
+</html>
